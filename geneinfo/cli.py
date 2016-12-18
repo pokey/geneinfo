@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
 
+import asyncio
+
 import click
+
+from geneinfo import process_genes
+
+
+def process_file(f):
+    return [
+        line.strip()
+        for line in f
+    ]
 
 
 @click.command()
-def main(args=None):
+@click.option('--genes', help='file containing list of genes',
+              type=click.File('r'))
+@click.option('--terms', help='file containing list of search terms',
+              type=click.File('r'))
+def main(genes, terms):
     """Console script for geneinfo"""
-    click.echo("Replace this message by putting your code into "
-               "geneinfo.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
-
-
-if __name__ == "__main__":
-    main()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(process_genes(process_file(genes),
+                                          process_file(terms)))
+    loop.close()
