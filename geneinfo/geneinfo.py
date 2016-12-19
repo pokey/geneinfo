@@ -1,5 +1,6 @@
 import asyncio
 from itertools import zip_longest
+import os
 import os.path
 
 from bs4 import BeautifulSoup
@@ -16,9 +17,9 @@ env = Environment(loader=PackageLoader('geneinfo', 'templates'))
 gene_template = env.get_template('gene.html')
 
 
-async def process_gene(session, pbar, gene, terms, do_gene_files):
+async def process_gene(session, pbar, gene, terms, do_gene_files, extra_term):
     results = await asyncio.gather(*[
-        process_search(session, pbar, gene, term, do_gene_files)
+        process_search(session, pbar, gene, term, do_gene_files, extra_term)
         for term in terms
     ])
     if do_gene_files:
@@ -39,8 +40,8 @@ async def process_gene(session, pbar, gene, terms, do_gene_files):
     return [count for (count, papers) in results]
 
 
-async def process_search(session, pbar, gene, term, do_gene_files):
-    fetcher = Fetcher(session, '{} {} cancer'.format(gene, term),
+async def process_search(session, pbar, gene, term, do_gene_files, extra_term):
+    fetcher = Fetcher(session, '{} {} {}'.format(gene, term, extra_term),
                       max_papers=500)
     await fetcher.search()
 
@@ -64,7 +65,8 @@ def grouper(n, iterable, fillvalue=None):
 
 
 # Get list of results
-async def process_genes(genes, terms, do_gene_files):
+async def process_genes(genes, terms, do_gene_files, extra_term):
+    os.makedirs('html/genes', exist_ok=True)
     if do_gene_files:
         genes = [
             gene
@@ -77,7 +79,8 @@ async def process_genes(genes, terms, do_gene_files):
             gene_totals = []
             for group in groups:
                 gene_totals += await asyncio.gather(*[
-                    process_gene(session, pbar, gene, terms, do_gene_files)
+                    process_gene(session, pbar, gene, terms, do_gene_files,
+                                 extra_term)
                     for gene in group
                     if gene is not None
                 ])
