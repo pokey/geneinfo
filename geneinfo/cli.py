@@ -19,9 +19,11 @@ def process_file(f):
               type=click.File('r'))
 @click.option('--terms', help='file containing list of search terms',
               type=click.File('r'))
-def main(genes, terms):
+@click.option('--papers/--no-papers', help='whether or not to download info '
+              'about papers', default=True)
+def main(genes, terms, papers):
     """Console script for geneinfo"""
     loop = asyncio.get_event_loop()
     loop.run_until_complete(process_genes(process_file(genes),
-                                          process_file(terms)))
+                                          process_file(terms), papers))
     loop.close()
