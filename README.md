@@ -1,4 +1,4 @@
-PubMed authors
+Gene info
 =============
 
 Uses [Entrez
