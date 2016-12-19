@@ -22,7 +22,7 @@ Running on OS X
 Run
 
 ```
-geneinfo --genes genes.txt --terms terms.txt
+geneinfo --genes genes.txt --terms terms.txt --extra-term regulation
 ```
 
 Where `genes.txt` is of the format
