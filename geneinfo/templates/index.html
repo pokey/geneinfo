@@ -1,0 +1,14 @@
+<html>
+   <head>
+      <title>Genes</title>
+   </head>
+   <body>
+      <h1>Genes</h1>
+      <ul>
+      {% for gene in genes %}
+         <li><a href="genes/{{gene}}.html">{{gene}}</a></li>
+      {% endfor %}
+      </ul>
+   </body>
+</html>
+

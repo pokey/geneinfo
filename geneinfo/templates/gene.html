@@ -1,0 +1,20 @@
+<html>
+   <head>
+      <title>{{gene}}</title>
+   </head>
+   <body>
+      <h1>
+      <a href="https://www.ncbi.nlm.nih.gov/gene/?term={{gene}}[sym]">
+         {{gene}}
+      </a>
+   </h1>
+      {% for term in terms %}
+         <h2>{{term.name}} ({{term.count}})</h2>
+         <ul>
+         {% for paper in term.papers %}
+            <li><a href="{{paper.url}}">{{paper.title}}</a></li>
+         {% endfor %}
+         </ul>
+      {% endfor %}
+   </body>
+</html>

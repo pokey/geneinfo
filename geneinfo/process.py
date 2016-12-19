@@ -28,7 +28,13 @@ def _extract_author(title, journal, author):
     )
 
 
+paper_uri = 'https://www.ncbi.nlm.nih.gov/pubmed/{}'
+
+
 def extract_paper_info(paper):
-    return paper.articletitle.string
+    return dict(
+        title=paper.articletitle.string,
+        url=paper_uri.format(paper.pmid.string)
+    )
     # title = paper.articletitle.string
     # journal = paper.journal.title.string
